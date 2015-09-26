@@ -1,0 +1,11 @@
+.angular-google-map {
+			display: block;
+}
+
+.angular-google-map-container { 
+	height:400px; 
+}
+
+.directionlist {
+	height: 100px;
+}
