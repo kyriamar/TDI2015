@@ -21,7 +21,6 @@ angular.module('starter', ['ionic', 'uiGmapgoogle-maps', 'ngCordova'])
     uiGmapGoogleMapApiProvider.configure({
         key: 'AIzaSyDh8jZ6jbQ7IUe0VaNRXbbYmtAOyyhE490',
         v: '3.20', //defaults to latest 3.X anyhow
-        libraries: '',
-        languaje:'es'
+        libraries: 'geometry',    
     });
 })

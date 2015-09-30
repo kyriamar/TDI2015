@@ -8,31 +8,8 @@ angular.module('starter', ['ionic', 'uiGmapgoogle-maps', 'ngCordova'])
 			latitude: -34.9040561, 
 			longitude: -56.1710437 
 		}, 
-		zoom: 13, 
+		zoom: 16, 
 	};
-
-	function toRad(value) {
-	  var RADIANT_CONSTANT = 0.0174532925199433;
-	  return (value * RADIANT_CONSTANT);
-	};
-
-	function calculateDistance(starting, ending) {
-	  var KM_RATIO = 6371; // Radius of the earth in km
-	  try {      
-	    var dLat = toRad(ending.latitude - starting.latitude);
-	    var dLon = toRad(ending.longitude - starting.longitude);
-	    var lat1Rad = toRad(starting.latitude);
-	    var lat2Rad = toRad(ending.latitude);
-	    
-	    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-	            Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1Rad) * Math.cos(lat2Rad);
-	    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-	    var d = KM_RATIO * c; // Distance in km
-	    return d;
-	  } catch(e) {
-	    return -1;
-	  }
-	}
 
 	var posOptions = {timeout: 10000, enableHighAccuracy: false};
     $cordovaGeolocation
@@ -48,26 +25,7 @@ angular.module('starter', ['ionic', 'uiGmapgoogle-maps', 'ngCordova'])
          alert("You must set geolocation persmissions");
     });
 
-    var watchOptions = {timeout : 3000, enableHighAccuracy: false};
-
-    var watch = $cordovaGeolocation.watchPosition(watchOptions);
-	watch.then(null, 
-	  function(err) {
-	    // error
-	  },
-	  function(position) {
-	  	console.log('Your position changed');
-	    $scope.map.center.latitude = position.coords.latitude;
-        $scope.map.center.longitude = position.coords.longitude;
-
-        $scope.marker = {
-          'coords': angular.copy($scope.map.center),
-          'id': 1
-        };
-	});
-  	
-
-	uiGmapGoogleMapApi.then(function(maps) {
+    uiGmapGoogleMapApi.then(function(maps) {
 		// instantiate google map objects for directions
 		var directionsDisplay = new maps.DirectionsRenderer();
 		var directionsService = new maps.DirectionsService();
@@ -82,9 +40,9 @@ angular.module('starter', ['ionic', 'uiGmapgoogle-maps', 'ngCordova'])
 		// get directions using google maps api
 		$scope.getDirections = function () {
 			var request = {
-				origin: $scope.directions.origin,
+				origin: $scope.map.center.latitude + ',' + $scope.map.center.longitude,
 				destination: $scope.directions.destination,
-				travelMode: google.maps.DirectionsTravelMode.DRIVING
+				travelMode: google.maps.DirectionsTravelMode.DRIVING,
 			};
 			directionsService.route(request, function (response, status) {
 				if (status === google.maps.DirectionsStatus.OK) {
@@ -92,10 +50,68 @@ angular.module('starter', ['ionic', 'uiGmapgoogle-maps', 'ngCordova'])
 					directionsDisplay.setMap($scope.map.control.getGMap());
 					directionsDisplay.setPanel(document.getElementById('directionsList'));
 					$scope.directions.showList = true;
-					} else {
-						alert('Google route unsuccesfull!');
-					}
+					iniciarPuntosdeGiro(response);
+				} else {
+					alert('Google route unsuccesfull!');
+				}
 			});
+		};
+
+		var markerArray = [];
+		var instrucciones = [];
+
+		var getDistance = function (position){
+			var desde = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+			if (markerArray.length > 0){
+				var dist = maps.geometry.spherical.computeDistanceBetween (desde,markerArray[0]);
+				if (dist<40){
+					markerArray.shift();
+					alert(instrucciones[0]);
+					instrucciones.shift();
+				}
+				return dist;
+			}else{
+				return -1
+			}
+		};
+
+		function iniciarPuntosdeGiro(directionResult) {
+
+		  var myRoute = directionResult.routes[0].legs[0];
+		  console.log("distancia total " + myRoute.distance.text);
+		  for (var i = 0; i < myRoute.steps.length; i++) {
+		      var marker = new google.maps.Marker({
+		        position: myRoute.steps[i].end_point,
+		        map: $scope.map.control.getGMap()
+		      });
+		      markerArray[i] = myRoute.steps[i].end_point;
+		      instrucciones[i] = myRoute.steps[i].maneuver;
+		      console.log(myRoute.steps[i].end_point);
+		      console.log(myRoute.steps[i].path);
+		      console.log(myRoute.steps[i].maneuver);
+		  }
 		}
+
+		var watchOptions = {timeout : 3000, enableHighAccuracy: true};
+
+    	var watch = $cordovaGeolocation.watchPosition(watchOptions);
+
+		watch.then(null, 
+		  function(err) {
+		    // error
+		  },
+		  function(position) {
+		  	console.log('Your position changed');
+		    $scope.map.center.latitude = position.coords.latitude;
+	        $scope.map.center.longitude = position.coords.longitude;
+	        var d = getDistance(position);
+	        console.log("estas a " + d + " metros");
+
+	        $scope.marker = {
+	          'coords': angular.copy($scope.map.center),
+	          'id': 1
+	        };
+		});
+
 	});
 }]);
