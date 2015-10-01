@@ -23,6 +23,7 @@
       <!-- your app's js -->
       <script src="js/app.js"></script>
       <script src="js/controller.js"></script>
+      <script src="js/bluetooth.js"></script>
    </head>
    <body ng-app="starter" ng-controller="appController">
       <ion-side-menus>
@@ -32,24 +33,27 @@
                <h1 class="title">Bicirutas</h1>
             </ion-header-bar>
             <ion-content>
-               <pre>{{marker.coords}}</pre>
+               <pre>{{accelera}}</pre>
                <ui-gmap-google-map center='map.center' zoom='map.zoom' control='map.control'>
                   <ui-gmap-marker idKey='marker.id' coords="marker.coords"></ui-gmap-marker>
                </ui-gmap-google-map>
                
                <label class="item item-input">
-                 <span class="input-label">Origen</span>
-                 <input type="text" ng-model="directions.origin">
+                 <span class="input-label">Calle</span>
+                 <input type="text" ng-model="directions.destStreet">
                </label>
 
                <label class="item item-input">
-                 <span class="input-label">Destino</span>
-                 <input type="text" ng-model="directions.destination">
+                 <span class="input-label">Esquina</span>
+                 <input type="text" ng-model="directions.destIntersect">
                </label>
-
+               <div id="message">Hello.</div>
                <button class="button button-clear button-positive button-full" ng-click="getDirections()">
                  Buscar!
-               </button>   
+               </button>
+               <button class="button button-clear button-positive button-full" id="connectButton">
+                 Conectar!
+               </button>  
             </ion-content>
          </ion-side-menu-content>
          <!-- Left menu -->
@@ -62,5 +66,8 @@
             </ion-content>   
          </ion-side-menu>
       </ion-side-menus>
+      <script>
+         app.initialize();
+     </script>
    </body>
 </html>
