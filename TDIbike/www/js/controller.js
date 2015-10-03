@@ -2,15 +2,26 @@ angular.module('starter', ['ionic', 'uiGmapgoogle-maps', 'ngCordova'])
 .controller('appController', ['$scope', 'uiGmapGoogleMapApi', '$cordovaGeolocation', '$cordovaDeviceMotion', 
 	function($scope, uiGmapGoogleMapApi, $cordovaGeolocation, $cordovaDeviceMotion) {
 	
-	// $cordovaDeviceMotion.getCurrentAcceleration().then(function (result) {
- //    	var X = result.x;
- //    	var Y = result.y;
- //    	var Z = result.z;
- //    	$scope.accelera = X;
- //    	console.log("ace" + X);
- //    }, function(err){	
- //    	alert("no se pudo cargar acceleracion");
- //    });	
+    // watch Acceleration
+	var options = { frequency: 5000 };
+
+    
+    document.addEventListener('deviceready', onDeviceReady, false);
+	function onDeviceReady() {
+	    var watch = $cordovaDeviceMotion.watchAcceleration(options);
+	    watch.then(
+	      null,
+	      function(error) {
+	      // An error occurred
+	      },
+	      function(result) {
+	        var X = result.x;
+	        var Y = result.y;
+	        console.log('aceleracion '+ X +', '+ Y);
+	        var timeStamp = result.timestamp;
+	    });
+	}
+
 
 	$scope.map = { 
 		control: {},
