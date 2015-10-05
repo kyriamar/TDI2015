@@ -1,0 +1,30 @@
+<h4 class="screen-title">PLANIFICÁ TU VIAJE</h4>
+<pre>{{accelera}}</pre>
+<label class="item item-input">
+ <span class="input-label">Calle</span>
+ <input type="text" ng-model="directions.destStreet">
+</label>
+
+<label class="item item-input">
+ <span class="input-label">Esquina</span>
+ <input type="text" ng-model="directions.destIntersect">
+</label>
+
+<div class="btn-container">
+	<button ng-show="showFindButton" class="button button-light" ng-class="{'active': directions.destIntersect !='' }" ng-click="getDirections()">
+		Buscar
+	</button>
+</div>
+
+<ui-gmap-google-map center='map.center' zoom='map.zoom' control='map.control'>
+  <ui-gmap-marker idKey='marker.id' coords="marker.coords"></ui-gmap-marker>
+</ui-gmap-google-map>
+
+<div ng-show="showBeginButton" class="dale-pedal" ng-click="begin()"> 
+	<img src="img/bike.png" alt="">
+	<span>¡Comenzar!</span> 
+</div>
+
+<div ng-show="!showFindButton" class="direction-button" ng-click="openDirections()"> 
+	<img src="img/directions.png" alt="">
+</div>

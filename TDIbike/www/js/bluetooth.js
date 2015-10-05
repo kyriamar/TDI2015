@@ -1,3 +1,9 @@
+mainapp.controller("BluetoothController", function($scope){
+	app.initialize();
+});
+
+
+
 /*
     SimpleSerial index.js
     Created 7 May 2013
@@ -14,8 +20,8 @@ var app = {
     Application constructor
  */
     initialize: function() {
+    	alert("Starting SimpleSerial app");
         this.bindEvents();
-        console.log("Starting SimpleSerial app");
     },
 /*
     bind any events that are required on startup to listeners:
@@ -158,4 +164,3 @@ var app = {
         display.innerHTML = "";
     }
 };      // end of app
-

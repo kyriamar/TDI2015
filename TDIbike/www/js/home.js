@@ -1,7 +1,6 @@
-angular.module('starter', ['ionic', 'uiGmapgoogle-maps', 'ngCordova'])
-.controller('appController', ['$scope', 'uiGmapGoogleMapApi', '$cordovaGeolocation', '$cordovaDeviceMotion', 
-	function($scope, uiGmapGoogleMapApi, $cordovaGeolocation, $cordovaDeviceMotion) {
-	
+mainapp.controller("HomeController", function($scope, uiGmapGoogleMapApi, $cordovaGeolocation, $cordovaDeviceMotion, $rootScope, $ionicSideMenuDelegate) {
+ 	$rootScope.directions = {};
+ 	$scope.showFindButton = true;
     // watch Acceleration
 	var options = { frequency: 5000 };
 
@@ -76,6 +75,8 @@ angular.module('starter', ['ionic', 'uiGmapgoogle-maps', 'ngCordova'])
 					directionsDisplay.setMap($scope.map.control.getGMap());
 					directionsDisplay.setPanel(document.getElementById('directionsList'));
 					$scope.directions.showList = true;
+					$rootScope.directions.showList = true;
+					$scope.showBeginButton = true;
 					iniciarPuntosdeGiro(response);
 				} else {
 					alert('Google route unsuccesfull!');
@@ -98,10 +99,10 @@ angular.module('starter', ['ionic', 'uiGmapgoogle-maps', 'ngCordova'])
 				var dist = maps.geometry.spherical.computeDistanceBetween(posAct,rutaGoogle.puntos[0]);
 				if (dist<40){
 					rutaGoogle.puntos.shift();
-					alert(rutaGoogle.instrucciones[0]);	
+					alert(rutaGoogle.instrucciones[0]);
+					app.sendMessage(rutaGoogle.instrucciones[0]);	
 					rutaGoogle.instrucciones.shift();				
 					rutaGoogle.intermedios.shift();
-					app.sendMessage(rutaGoogle.instrucciones[0]);
 					//borrarMarcadoresInterm();
 					
 					// for (var j = 0; j < rutaGoogle.intermedios[0].length; j++){
@@ -230,4 +231,13 @@ angular.module('starter', ['ionic', 'uiGmapgoogle-maps', 'ngCordova'])
 		});
 
 	});
-}]);
+
+	$scope.begin = function(){
+		$scope.showBeginButton = false;
+		$scope.showFindButton = false;
+	};
+
+	$scope.openDirections = function(){
+		$ionicSideMenuDelegate.toggleRight();
+	}
+});

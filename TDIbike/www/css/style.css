@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'OpenSans';
+    src: url(open-sans/OpenSans-Regular.ttf);
+}
+
 .angular-google-map {
 			display: block;
 }
@@ -8,4 +13,151 @@
 
 .directionlist {
 	height: 100px;
+}
+
+.item {
+    background-color: #0BCDBC;
+    margin: 20px;
+    border: none;
+    border-bottom: 1px solid #07A093;
+}
+
+.item-input {
+	padding: 0 !important;
+}
+
+.pane{
+	background-color:#0BCDBC !important;
+	font-family: 'OpenSans' !important;
+}
+
+.input-label {
+    color: #007D73;
+    width: 20%;
+}
+
+.screen-title {
+	text-align: center;
+	color: white;
+	margin-top: 20px;
+}
+
+.button.button-light {
+    border-color: #00988B;
+    background-color: #0BCDBC;
+    color: #01736A;
+    width: 90%;
+    margin: 15px;
+    border-radius: 5px;
+    font-family: 'OpenSans' !important;
+    font-size: 16px;
+}
+
+input{
+    color: #FFF !important;
+    font-size: 18px !important;
+}
+
+.active {
+	background-color: #1A3432 !important;
+	border-color: #1A3432 !important;
+	color: white !important;
+}
+
+#login {
+	text-align: center;
+	color: rgba(0, 0, 0, 0.5);
+	font-weight: 13px;
+}
+
+#login .input-label{
+	color: #FFF; 
+}
+
+#login .item {
+	border-color: #FFF !important;
+	margin: 16px 40px;
+}
+.space102 {
+	height: 102px;
+}
+
+#login a {
+	color: #FFF;
+	font-size: 14px;
+	display: block;
+	margin-top: 9px;
+}
+
+#login .button.button-light {
+    width: 240px;
+}
+
+.casco {
+	width: 80px;
+	margin: 50px 0px 34px 0px; 
+}
+
+#bluetooth {
+	text-align: center;
+	color: white;
+}
+
+#bluetooth h4 {
+	margin-top: 100px;
+	color: white;
+}
+
+#bluetooth small {
+	margin-top:15px;
+	color: #333;
+	display: block;
+}
+
+h4 {
+	font-family: 'OpenSans' !important;
+	font-weight: bold;
+}
+
+.dale-pedal {
+    position: absolute;
+    bottom: -27px;
+    left: 34%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgba(0, 0, 0, 0.82);
+    width: 126px;
+    height: 126px;
+    border-radius: 50%;
+}
+
+.dale-pedal span {
+    color: #FFF;
+    font-size: 16px;
+    margin: -25px 20px;
+    display: block;
+}
+
+.dale-pedal img {
+    width: 36px;
+    margin: 30px 45px;
+}
+
+.btn-container {
+	height: 77px;
+}
+
+.direction-button {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(0, 0, 0, 0.82);
+    width: 59px;
+    height: 59px;
+    border-radius: 50%;
+}
+
+.direction-button img {
+    width: 24px;
+    margin: 15px 20px;
 }
