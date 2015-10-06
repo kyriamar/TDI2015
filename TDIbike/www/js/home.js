@@ -1,26 +1,11 @@
 mainapp.controller("HomeController", function($scope, uiGmapGoogleMapApi, $cordovaGeolocation, $cordovaDeviceMotion, $rootScope, $ionicSideMenuDelegate) {
  	$rootScope.directions = {};
  	$scope.showFindButton = true;
-    // watch Acceleration
-	var options = { frequency: 5000 };
 
-    
-    document.addEventListener('deviceready', onDeviceReady, false);
-	function onDeviceReady() {
-	    var watch = $cordovaDeviceMotion.watchAcceleration(options);
-	    watch.then(
-	      null,
-	      function(error) {
-	      // An error occurred
-	      },
-	      function(result) {
-	        var X = result.x;
-	        var Y = result.y;
-	        console.log('aceleracion '+ X +', '+ Y);
-	        var timeStamp = result.timestamp;
-	    });
-	}
-
+	$scope.marker = {
+		'coords': '0,0',
+		'id': 1
+	};
 
 	$scope.map = { 
 		control: {},
@@ -30,26 +15,7 @@ mainapp.controller("HomeController", function($scope, uiGmapGoogleMapApi, $cordo
 		}, 
 		zoom: 16, 
 	};
-
-	$scope.marker = {
-		'coords': '0,0',
-		'id': 1
-	};
-
-	var posOptions = {timeout: 10000, enableHighAccuracy: false};
-    $cordovaGeolocation
-    	.getCurrentPosition(posOptions).then(function (position) {
-          $scope.map.center.latitude = position.coords.latitude;
-          $scope.map.center.longitude = position.coords.longitude;
-
-          $scope.marker = {
-          	'coords': angular.copy($scope.map.center),
-          	'id': 1
-          };
-      }, function(err) {
-         alert("You must set geolocation persmissions");
-    });
-
+    
     uiGmapGoogleMapApi.then(function(maps) {
 		// instantiate google map objects for directions
 		var directionsDisplay = new maps.DirectionsRenderer();
@@ -79,44 +45,35 @@ mainapp.controller("HomeController", function($scope, uiGmapGoogleMapApi, $cordo
 					$scope.showBeginButton = true;
 					iniciarPuntosdeGiro(response);
 				} else {
-					alert('Google route unsuccesfull!');
+					alert('No se pudo calcular una ruta, revisar direccion!');
 				}
 			});
 		};
 
 		var rutaGoogle = {
 			markersMapa: [],
-			markersInterm: [],
 			puntos: [],
 			instrucciones: [],
-			intermedios: []
 		};
 
-		var getDistance = function (position){
+		function getDistance(position){
 			var posAct = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 			if (rutaGoogle.puntos.length > 0){
-
 				var dist = maps.geometry.spherical.computeDistanceBetween(posAct,rutaGoogle.puntos[0]);
-				if (dist<40){
-					rutaGoogle.puntos.shift();
-					alert(rutaGoogle.instrucciones[0]);
-					app.sendMessage(rutaGoogle.instrucciones[0]);	
+				if (dist<40){					
+					app.sendMessage(rutaGoogle.instrucciones[0]);
+					rutaGoogle.puntos.shift();	
 					rutaGoogle.instrucciones.shift();				
-					rutaGoogle.intermedios.shift();
 				}			
-				return dist;
-			}else{
-				return -1
 			}
 		};
 
+		//inicia los puntos que contienen instrucciones de maniobra
 		function iniciarPuntosdeGiro(directionResult) {
 			borrarMarcadores();
 			rutaGoogle.puntos = [];
 			rutaGoogle.intrucciones = [];
-			rutaGoogle.intermedios = [];
 			var myRoute = directionResult.routes[0].legs[0];
-			console.log("distancia total " + myRoute.distance.text);
 			for (var i = 0; i < myRoute.steps.length; i++) {
 				var marker = new google.maps.Marker({
 					position: myRoute.steps[i].end_point,
@@ -125,29 +82,47 @@ mainapp.controller("HomeController", function($scope, uiGmapGoogleMapApi, $cordo
 				rutaGoogle.markersMapa.push(marker);
 				rutaGoogle.puntos[i] = myRoute.steps[i].end_point;
 				rutaGoogle.instrucciones[i] = myRoute.steps[i].maneuver;
-				rutaGoogle.intermedios[i] = [];
-				console.log(myRoute.steps[i].path);
 			}
 			//la primera no tiene instrucciones
 			rutaGoogle.instrucciones.shift();
 			rutaGoogle.instrucciones.push("llegaste");
 		}
 
+		//borra los marcadores cada vez que se busca una ruta
 		function borrarMarcadores() {
 		  for (var i = 0; i < rutaGoogle.markersMapa.length; i++ ) {
 		    rutaGoogle.markersMapa[i].setMap(null);
 		  }
 		  rutaGoogle.markersMapa.length = 0;
-		  borrarMarcadoresInterm()
 		}
 
-		function borrarMarcadoresInterm() {
-		  for (var i = 0; i < rutaGoogle.markersInterm.length; i++ ) {
-		    rutaGoogle.markersInterm[i].setMap(null);
-		  }
-		  rutaGoogle.markersInterm.length = 0;
+		var time1 = 0;
+		var velini = 0;
+		var estado = 1;
+
+		function checkfreno(position){
+			var diff = Math.abs(time1 - new Date(position.timestamp));
+		  	if (diff>1){ //un segundo desde la lectura anterior
+		  		var mps = 3.6;
+		  		var kmh = position.coords.speed * mps;
+		  		var deltavel = velini - kmh;
+		  		if (estado == 1){
+		  			if (deltavel > 10){ //la velocidad disminuyo
+			  			estado = 2;
+			  			app.sendMessage("brake-on");
+			  		}  			
+		  		}else{
+		  			if ( deltavel>1 && deltavel < 4){ //la velocidad se mantuvo en estado frenando
+		  				app.sendMessage("brake-off");
+		   				estado =1;
+		  			}
+		  		}	  			
+		  		velini = kmh;
+		  		time1 = new Date(position.timestamp);
+		  	}
 		}
 
+		
 		var watchOptions = {timeout : 3000, enableHighAccuracy: true};
 
     	var watch = $cordovaGeolocation.watchPosition(watchOptions);
@@ -157,12 +132,10 @@ mainapp.controller("HomeController", function($scope, uiGmapGoogleMapApi, $cordo
 		    // error
 		  },
 		  function(position) {
-		  	console.log('Your position changed');
+		  	checkfreno(position);
 		    $scope.map.center.latitude = position.coords.latitude;
 	        $scope.map.center.longitude = position.coords.longitude;
-	        var d = getDistance(position);
-	        console.log("estas a " + d + " metros");
-
+	        getDistance(position);
 	        $scope.marker = {
 	          'coords': angular.copy($scope.map.center),
 	          'id': 1
