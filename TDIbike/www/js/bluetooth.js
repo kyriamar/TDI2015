@@ -20,7 +20,6 @@ var app = {
     Application constructor
  */
     initialize: function() {
-    	alert("Starting SimpleSerial app");
         this.bindEvents();
     },
 /*
