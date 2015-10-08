@@ -2,6 +2,9 @@ mainapp.controller("HomeController", function($scope, uiGmapGoogleMapApi, $cordo
  	$rootScope.directions = {};
  	$scope.showFindButton = true;
 
+ 	var polyline;
+ 	var bounds;
+
 	$scope.marker = {
 		'coords': '0,0',
 		'id': 1
@@ -43,6 +46,29 @@ mainapp.controller("HomeController", function($scope, uiGmapGoogleMapApi, $cordo
 					$scope.directions.showList = true;
 					$rootScope.directions.showList = true;
 					$scope.showBeginButton = true;
+
+					polyline = new google.maps.Polyline({
+					  path: [],
+					  strokeColor: '#FF0000',
+					  strokeWeight: 3
+					});
+					
+					bounds = new google.maps.LatLngBounds();
+
+
+					var legs = response.routes[0].legs;
+					for (i=0;i<legs.length;i++) {
+					  var steps = legs[i].steps;
+					  for (j=0;j<steps.length;j++) {
+					    var nextSegment = steps[j].path;
+					    for (k=0;k<nextSegment.length;k++) {
+					      polyline.getPath().push(nextSegment[k]);
+					      bounds.extend(nextSegment[k]);
+					    }
+					  }
+					}
+
+
 					iniciarPuntosdeGiro(response);
 				} else {
 					alert('No se pudo calcular una ruta, revisar direccion!');
@@ -74,6 +100,7 @@ mainapp.controller("HomeController", function($scope, uiGmapGoogleMapApi, $cordo
 			rutaGoogle.puntos = [];
 			rutaGoogle.intrucciones = [];
 			var myRoute = directionResult.routes[0].legs[0];
+			console.log(myRoute);
 			for (var i = 0; i < myRoute.steps.length; i++) {
 				var marker = new google.maps.Marker({
 					position: myRoute.steps[i].end_point,
@@ -135,6 +162,17 @@ mainapp.controller("HomeController", function($scope, uiGmapGoogleMapApi, $cordo
 		  	checkfreno(position);
 		    $scope.map.center.latitude = position.coords.latitude;
 	        $scope.map.center.longitude = position.coords.longitude;
+
+	        var theposition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+	        console.log(theposition);
+	        if (polyline) {
+	        	var isInRoute = maps.geometry.poly.isLocationOnEdge(theposition, polyline, 0.00050)
+	        	if (!isInRoute) {
+	        		$scope.getDirections();
+	        	}
+	        }
+	        
+
 	        getDistance(position);
 	        $scope.marker = {
 	          'coords': angular.copy($scope.map.center),
