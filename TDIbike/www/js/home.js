@@ -32,8 +32,7 @@ mainapp.controller("HomeController", function($scope, uiGmapGoogleMapApi, $cordo
 		}
 
 		// get directions using google maps api
-		$scope.getDirections = function () {
-
+		$scope.getDirections = function (recalculate) {
 			var request = {
 				origin: $scope.map.center.latitude + ',' + $scope.map.center.longitude,
 				destination: $scope.directions.destStreet + ' esquina ' + $scope.directions.destIntersect + ', Montevideo',
@@ -46,7 +45,9 @@ mainapp.controller("HomeController", function($scope, uiGmapGoogleMapApi, $cordo
 					directionsDisplay.setPanel(document.getElementById('directionsList'));
 					$scope.directions.showList = true;
 					$rootScope.directions.showList = true;
-					$scope.showBeginButton = true;
+					if (!recalculate){
+						$scope.showBeginButton = true;
+					}
 
 					polyline = new google.maps.Polyline({
 					  path: [],
@@ -92,6 +93,9 @@ mainapp.controller("HomeController", function($scope, uiGmapGoogleMapApi, $cordo
 				var dist = maps.geometry.spherical.computeDistanceBetween(posAct,rutaGoogle.puntos[0]);
 				if (dist<40){					
 					app.sendMessage(rutaGoogle.instrucciones[0]);
+					if (rutaGoogle.instrucciones[0] === 'llegaste') {
+						$scope.showFindButton = true;
+					}
 					rutaGoogle.puntos.shift();	
 					rutaGoogle.instrucciones.shift();				
 				}			
@@ -174,7 +178,7 @@ mainapp.controller("HomeController", function($scope, uiGmapGoogleMapApi, $cordo
 	        if (polyline) {
 	        	var isInRoute = maps.geometry.poly.isLocationOnEdge(theposition, polyline, 0.00050)
 	        	if (!isInRoute) {
-	        		$scope.getDirections();
+	        		$scope.getDirections(true);
 	        	}
 	        }
 	        
