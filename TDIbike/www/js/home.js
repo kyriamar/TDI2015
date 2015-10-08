@@ -7,7 +7,7 @@ mainapp.controller("HomeController", function($scope, uiGmapGoogleMapApi, $cordo
 
 	$scope.marker = {
 		'coords': '0,0',
-		'id': 1
+		'id': 1,
 	};
 
 	$scope.map = { 
@@ -33,6 +33,7 @@ mainapp.controller("HomeController", function($scope, uiGmapGoogleMapApi, $cordo
 
 		// get directions using google maps api
 		$scope.getDirections = function () {
+
 			var request = {
 				origin: $scope.map.center.latitude + ',' + $scope.map.center.longitude,
 				destination: $scope.directions.destStreet + ' esquina ' + $scope.directions.destIntersect + ', Montevideo',
@@ -81,10 +82,13 @@ mainapp.controller("HomeController", function($scope, uiGmapGoogleMapApi, $cordo
 			puntos: [],
 			instrucciones: [],
 		};
+		var degree = 0;
 
 		function getDistance(position){
 			var posAct = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-			if (rutaGoogle.puntos.length > 0){
+			degree = maps.geometry.spherical.computeHeading(posAnterior,posAct);
+			posAnterior = posAct;
+			if (rutaGoogle.puntos.length > 0){				
 				var dist = maps.geometry.spherical.computeDistanceBetween(posAct,rutaGoogle.puntos[0]);
 				if (dist<40){					
 					app.sendMessage(rutaGoogle.instrucciones[0]);
@@ -126,6 +130,7 @@ mainapp.controller("HomeController", function($scope, uiGmapGoogleMapApi, $cordo
 		var time1 = 0;
 		var velini = 0;
 		var estado = 1;
+		var posAnterior = new google.maps.LatLng($scope.map.center.latitude, $scope.map.center.longitude);
 
 		function checkfreno(position){
 			var diff = Math.abs(time1 - new Date(position.timestamp));
@@ -146,6 +151,7 @@ mainapp.controller("HomeController", function($scope, uiGmapGoogleMapApi, $cordo
 		  		}	  			
 		  		velini = kmh;
 		  		time1 = new Date(position.timestamp);
+		  		
 		  	}
 		}
 
@@ -174,9 +180,17 @@ mainapp.controller("HomeController", function($scope, uiGmapGoogleMapApi, $cordo
 	        
 
 	        getDistance(position);
+	        
 	        $scope.marker = {
 	          'coords': angular.copy($scope.map.center),
-	          'id': 1
+	          'id': 1,
+	          'options': { icon: {  path: maps.SymbolPath.FORWARD_CLOSED_ARROW,
+				                    scale: 4,
+				                    fillColor: '#0000FF',
+				                    fillOpacity: 1,
+				                    strokeColor: '#0000FF',
+				                    rotation: degree   
+				                    }}
 	        };
 		});
 
