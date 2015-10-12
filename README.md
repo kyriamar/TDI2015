@@ -9,7 +9,7 @@ Para ello, la app codifica las señales (habitualmente manifestadas en una panta
 # Installation
 
 ### Aplicación mobile
-La aplicación mobile está implementada en ionic, framework basado en cordova y angular.js y se puede compilar tanto para Android como para IOS. La aplicación está testeada en Android.
+La aplicación mobile está implementada en ionic, framework basado en cordova y angular.js y se puede compilar tanto para Android como para IOS. La aplicación está testeada en Android 4.2.
 
 Para poder compilar la aplicación es necesario instalar node.js, ionic y cordova.
 
@@ -22,6 +22,13 @@ $ git https://github.com/kyriamar/TDI2015.git
 $ cd TDIBike
 $ ionic build [android | ios]
 $ ionic run --device
+```
+
+Son necesarias las siguientes dependencias en ionic.
+```sh
+$ cordova plugin add cordova-plugin-geolocation
+$ cordova plugin add cordova-plugin-whitelist
+$ cordova plugin add cordova-plugin-bluetooth-serial
 ```
 
 ### Raspberry
