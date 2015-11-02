@@ -40,6 +40,8 @@ class ofApp : public ofBaseApp{
     
         // ---> tracking blob id
         ofxBlobTracker _blobTracker;
+    
+        std::map<std::string, std::pair<std::string,int> > blob_mapping;
 
 		int 				threshold;
 		bool				bLearnBakground;

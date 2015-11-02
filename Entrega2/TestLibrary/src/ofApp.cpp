@@ -60,19 +60,69 @@ void ofApp::update(){
         _blobTracker.track(&contourFinder); 
 	}
     
-    if (numberOfBlobs < contourFinder.nBlobs){
-        cout << "number of blobs changed "<< numberOfBlobs <<" "<< contourFinder.nBlobs<< "\n  ";
-    }
+//    if (numberOfBlobs < contourFinder.nBlobs){
+//        cout << "number of blobs changed "<< numberOfBlobs <<" "<< contourFinder.nBlobs<< "\n  ";
+//    }
     
     numberOfBlobs = contourFinder.nBlobs;
+    vector<string> listOfBlobs;
+    vector<string> toDelete;
     
-    for (int i = 0; i < numberOfBlobs; i++){
+    for (int i = 0; i < min(numberOfBlobs,4); i++){
+        string id = ofToString(contourFinder.blobs[i].id);
+        listOfBlobs.push_back(id);
+    }
+    
+
+    for(map<string,pair<string, int> >::iterator it = blob_mapping.begin(); it != blob_mapping.end(); it++) {
+        string id = it->first;
+        
+        if(std::find(listOfBlobs.begin(), listOfBlobs.end(), id) != listOfBlobs.end()) {
+            /* v contains x */
+        } else {
+            cout << "Off " << blob_mapping[id].first << endl;
+            midiOut.sendNoteOff(blob_mapping[id].second, ofToInt(blob_mapping[id].first),0);
+            toDelete.push_back(id);
+        }
+    }
+    
+    for (int i = 0; i < toDelete.size(); i++){
+        map<string,pair<string, int> >::iterator it = blob_mapping.find(toDelete[i]);
+        blob_mapping.erase (it);
+    }
+
+    
+    
+    for (int i = 0; i < min(numberOfBlobs,4); i++){
+        
         if (trackingArea.intersects(contourFinder.blobs[i].boundingRect)) {
+            
+            string id = ofToString(contourFinder.blobs[i].id);
             ofPoint pos = contourFinder.blobs[i].boundingRect.getPosition();
-            note = ofMap(pos.x, 48, 122, 0, 127);
-            velocity = 64;
-            midiOut.sendNoteOn(i+1, note,  velocity);
-            changeControl(pos.x, pos.y, i+1);
+            
+            float area = trackingArea.getIntersection(contourFinder.blobs[i].boundingRect).getArea();
+            note = ofMap(area, 0, 50000, 127,36 ,true);
+            
+            if  (blob_mapping.find(id) == blob_mapping.end()){
+                blob_mapping[id] = make_pair(ofToString(note), i+1);
+                velocity = 64;
+                cout << "On " << note << endl;
+                
+                midiOut.sendNoteOn(i+1, note,  velocity);
+                changeControl(pos.x, pos.y, i+1);
+            }else {
+                if (ofToString(note) != blob_mapping[id].first){
+                    cout << "Off " << blob_mapping[id].first << endl;
+                    midiOut.sendNoteOff(blob_mapping[id].second, ofToInt(blob_mapping[id].first),0);
+                    
+                    blob_mapping[id] = make_pair(ofToString(note), i+1);
+                    velocity = 64;
+                    
+                    cout << "On " << note << endl;
+                    midiOut.sendNoteOn(i+1, note,  velocity);
+                    changeControl(pos.x, pos.y, i+1);
+                }
+            }
         }
     }
 
@@ -92,7 +142,7 @@ void ofApp::draw(){
     
     numberOfBlobs = contourFinder.nBlobs;
     
-    for (int i = 0; i < numberOfBlobs; i++){
+    for (int i = 0; i < min(numberOfBlobs,4); i++){
 
         if (trackingArea.intersects(contourFinder.blobs[i].boundingRect)) {
             float area = trackingArea.getIntersection(contourFinder.blobs[i].boundingRect).getArea();
@@ -124,7 +174,7 @@ void ofApp::draw(){
 	stringstream reportStr;
 	reportStr << "press ' ' to capture bg" << endl
 			  << "threshold " << threshold << " (press: +/-)" << endl
-              << "num blobs found " << contourFinder.nBlobs << ", fps: " << ofGetFrameRate();
+              << "num blobs found " << min(contourFinder.nBlobs,4)<< ", fps: " << ofGetFrameRate();
 	ofDrawBitmapString(reportStr.str(), 20, 400);
 
 }
