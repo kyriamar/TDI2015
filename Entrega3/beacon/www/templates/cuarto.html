@@ -1,0 +1,34 @@
+<div class="cuarto">
+    <div class="header">
+        <span class="subtitle">Estas en la</span><br>
+        <span class="title">Cuarto</span>
+    </div>
+    
+    <div class="selector">
+        <ul>
+            <li> <i class="ion-ios-lightbulb"></i>luz de techo</li>
+            <li> <i class="ion-ios-lightbulb"></i>luz de techo</li>
+            <li> <i class="ion-ios-lightbulb"></i>luz de techo</li>
+            <li> <i class="ion-ios-lightbulb"></i>luz de techo</li>
+        </ul>
+    </div>
+    <div class="footer">
+        <div  ng-click="modal.show()">
+            <i class="ion-refresh"></i><span>Calibrar</span>
+        </div>
+    </div>
+    
+</div>
+
+<script id="modalCuarto.html" type="text/ng-template">
+  <div class="modal cuarto">
+    <header class="modal-header">
+      <div class="button button-clear right" ng-click="salir()"><span class="icon ion-close"></span></div>
+    </header>
+    <content padding="true">
+      <div class='modalTitle'>Calibrando <br> Cuarto </div>
+      <img class="cal-cuarto" src="img/cuarto.png" alt="cuart">
+      <p class="modal-text">Camina suavemente por la habitación para calibrarla correctamente.</p>
+    </content>
+  </div>
+</script>

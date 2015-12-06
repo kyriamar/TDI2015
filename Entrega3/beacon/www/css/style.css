@@ -1,0 +1,182 @@
+@font-face {
+    font-family: 'museosans';
+    src: url(museosans.woff);
+}
+
+body{
+	font-family: museosans;
+}
+
+.bar-header{
+	background-color: #23282C !important;
+}
+
+.keypad {
+	background-color: rgb(35,40,44);
+	height: 100%;
+    position: absolute;
+    width: 100%;
+    margin-top: 40px;
+    text-align: center;
+    color: white;
+}
+
+.button-icon {
+    opacity: 0.48;
+    color: white;
+}
+
+.aire img {
+	padding-bottom: 15px;
+}
+
+.column {
+	width: 50%;
+	float: left;
+	border-bottom: 1.5px solid black;
+	border-left: 1.5px solid black;
+	height: 120px;
+	padding:20px;
+}
+
+.last {
+	width: 50%;
+	float: left;
+	border-left: 1.5px solid black;
+	height: 120px;
+	padding:20px;
+}
+
+
+.bano {
+	background-color: rgb(223,190,49);
+	height: 100%;
+    position: absolute;
+    width: 100%;
+}
+
+.cocina {
+    background-color: rgb(61,155, 212);
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+
+.cuarto {
+    background-color: rgb(178, 62, 47);
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+
+ion-side-menu {
+	opacity: 0.9;
+}
+
+ion-side-menu > ion-content {
+	background-color: black;
+}
+
+.item {
+    margin: 5px 10px;
+    border-radius: 4px;
+    color: white;
+    border: none;
+}
+
+.item-cocina {
+	background-color: rgb(61,155, 212);
+}
+.item-cuarto {
+	background-color: rgb(178, 62, 47);
+}
+.item-bano {
+	background-color: rgb(223,190,49);
+}
+
+.item-unknown {
+	background-color: rgb(35,40,44);
+}
+
+.bar.bar-assertive {
+    border: none !important;
+    background-color: black !important;
+    background-image: none !important;
+}
+
+.header {
+	height: 90px;
+	border-bottom: 2px solid;
+	border-bottom-color: rgba(255, 255, 255, 0.30);
+	margin: 24px 30px;
+	text-align: center;
+	color: white;
+}
+
+.footer {
+	border-top: 2px solid;
+	border-top-color: rgba(255, 255, 255, 0.30);
+	margin: 40px 30px;
+	text-align: center;
+	color: white;
+	font-size:20px; 
+	padding: 20px;
+}
+
+.subtitle {
+	opacity: 0.5;
+	text-transform: uppercase;
+}
+
+.title {
+	font-size:31px; 
+	margin: 10px 0px;
+	display: block;
+}
+
+.selector {
+	margin: 30px;
+	font-size: 19px; 
+	color: white;
+}
+
+.selector li {
+	margin-bottom: 30px;
+}
+
+.selector i{
+	margin-right: 20px;
+}
+
+.footer i {
+	margin-right: 10px;
+}
+
+.right {
+	float: right;
+}
+
+.modalTitle {
+    font-size: 27px;
+    color: white;
+    margin: 20px;
+    line-height: 30px;
+    text-align: center;
+}
+
+.modal-header {
+	height: 40px;
+}
+
+.cal-cuarto {
+    width: 50%;
+    margin: 15px 25%;
+}
+
+.modal-text {
+    color: white;
+    font-size: 16px;
+    margin: 25px;
+    text-align: center;
+    line-height: 18pt;
+}
