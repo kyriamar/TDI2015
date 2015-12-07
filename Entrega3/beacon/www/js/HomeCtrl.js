@@ -1,4 +1,14 @@
-app.controller('HomeCtrl',function($rootScope, $scope, $state, $interval, $ionicModal, $stateParams){
+app.controller('HomeCtrl',function($rootScope, $scope, $state, $interval, $ionicModal, $stateParams,$ionicPlatform,$storageService){
+
+	//bring the rooms from Storage
+	  $ionicPlatform.ready(function() {
+	    $scope.roomsList = $storageService.getObject('roomsList');
+	    if (!$scope.roomsList.length){
+	       $scope.roomsList = [];
+	    }
+	    
+	  });
+
 
 	var template = "modal" + $stateParams.room + ".html"
 	$ionicModal.fromTemplateUrl(template, function($ionicModal) {

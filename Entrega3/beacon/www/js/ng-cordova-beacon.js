@@ -105,6 +105,18 @@ angular.module("ngCordovaBeacon", [])
              */
             stopMonitoringForRegion: function(beaconRegion) {
                 cordova.plugins.locationManager.stopMonitoringForRegion(beaconRegion);
+            },
+
+            isBluetoothEnabled: function(){
+                return cordova.plugins.locationManager.isBluetoothEnabled();
+            },
+
+            enableBluetooth: function () {
+                return cordova.plugins.locationManager.enableBluetooth();
+            },
+             
+            disableBluetooth: function () {
+                return cordova.plugins.locationManager.disableBluetooth();
             }
 
         };

@@ -3,6 +3,30 @@
     src: url(museosans.woff);
 }
 
+@font-face {
+    font-family: 'MuseoSansO';
+    src: url(museo-sans/MuseoSans-100.otf);
+}
+
+@font-face {
+    font-family: 'MuseoSansO';
+    font-weight: 300;
+    src: url(museo-sans/MuseoSans-300.otf);
+}
+
+@font-face {
+    font-family: 'MuseoSansO';
+    font-weight: 500;
+    src: url(museo-sans/MuseoSans-500.otf);
+}
+
+@font-face {
+    font-family: 'MuseoSansO';
+    font-weight: 700;
+    src: url(museo-sans/MuseoSans-700.otf);
+}
+
+
 body{
 	font-family: museosans;
 }
@@ -179,4 +203,79 @@ ion-side-menu > ion-content {
     margin: 25px;
     text-align: center;
     line-height: 18pt;
+}
+
+.config-title {
+	color: #3992E4;
+	text-align: center;
+	font-family: 'MuseoSansO' !important;
+	font-size: 34px;
+	padding-top: 50px;
+}
+
+#config small {
+	display: block;
+	text-align: center;
+	position: relative;
+	font-family: 'MuseoSansO';
+	font-weight: 300;
+	margin-left: auto;
+    margin-right: auto;
+    margin-top: 24px;
+	font-size: 16px;
+	color: #9B9B9B;
+	width: 226px;
+}
+
+#config small2 {
+	display: block;
+	text-align: center;
+	position: relative;
+	font-family: 'MuseoSansO';
+	font-weight: 300;
+	margin-left: auto;
+    margin-right: auto;
+    margin-top: 59px;
+	font-size: 16px;
+	color: #9B9B9B;
+}
+
+#config sbold {
+	font-weight: bold;
+}
+
+.bluetooth {
+	position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 74px;
+    display: block;
+}
+
+.mapaCasa {
+	position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 15px;
+    display: block;
+}
+
+.togleButton {
+	position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 21px;
+    display: block;
+}
+
+#config .button.button-positive {
+	display: block;
+	position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    width: 240px;
+    margin-top: 21px;
+    font-size: 17px;
+    font-family: 'MuseoSansO';
+	font-weight: 500;
 }

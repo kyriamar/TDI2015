@@ -1,4 +1,4 @@
-var app = angular.module('starter', ['ionic', 'ngCordovaBeacon']);
+var app = angular.module('starter', ['ionic', 'ngCordovaBeacon','ionic.utils']);
  
 app.run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
@@ -14,6 +14,15 @@ app.run(function($ionicPlatform) {
 app.config(function($stateProvider, $urlRouterProvider) {
 
   $stateProvider
+  .state('config', {
+    url: '/config',
+    templateUrl: 'templates/config.html',
+    controller: 'ConfigCtrl'
+  })
+  .state('detect', {
+    url: '/detect',
+    templateUrl: 'templates/configDetect.html',
+  })
   .state('inicio', {
     url: '/inicio',
     templateUrl: 'templates/inicio.html',
@@ -57,7 +66,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
     });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/inicio');
+  $urlRouterProvider.otherwise('/config');
 
 });
 
