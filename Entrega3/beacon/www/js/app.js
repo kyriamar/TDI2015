@@ -1,4 +1,4 @@
-var app = angular.module('starter', ['ionic', 'ngCordovaBeacon','ionic.utils']);
+var app = angular.module('starter', ['ionic', 'ngCordovaBeacon']);
  
 app.run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
@@ -30,7 +30,8 @@ app.config(function($stateProvider, $urlRouterProvider) {
   .state('casa', {
     url: '/casa',
     templateUrl: 'templates/casa.html',
-    abstract:true
+    abstract:true,
+    controller: 'BeaconCtrl'
   })
   .state('casa.cocina', {
     url: '/cocina',
@@ -63,6 +64,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
   .state('casa.beacons', {
       url: '/beacons',
       templateUrl: 'templates/beacons.html',
+      controller: 'DebugCtrl'
     });
 
   // if none of the above states are matched, use this as the fallback
@@ -72,6 +74,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
 
 app.run(function($rootScope, $ionicPlatform, $cordovaBeacon) {
     $rootScope.beacons = {};
+    $rootScope.predecir = false;
 
     $ionicPlatform.ready(function() {
  

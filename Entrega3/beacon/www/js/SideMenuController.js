@@ -1,5 +1,7 @@
-app.controller('SideMenuController',function($scope, $ionicSideMenuDelegate, $state){
+app.controller('SideMenuController',function($scope, $ionicSideMenuDelegate, $state, $rootScope){
 	
+	$scope.beacons = $rootScope.beacons;
+
 	$scope.goToCuarto = function() {
 		 $state.go('casa.cuarto');
 	};
@@ -16,4 +18,7 @@ app.controller('SideMenuController',function($scope, $ionicSideMenuDelegate, $st
 		 $state.go('casa.beacons');
 	};
 
+	$scope.$watch('toggle', function(){
+		$rootScope.predecir = !$rootScope.predecir;
+	})
 });

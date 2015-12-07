@@ -1,16 +1,6 @@
-app.controller('HomeCtrl',function($rootScope, $scope, $state, $interval, $ionicModal, $stateParams,$ionicPlatform,$storageService){
+app.controller('HomeCtrl',function($rootScope, $scope, $state, $interval, $ionicModal, $stateParams){
 
-	//bring the rooms from Storage
-	  $ionicPlatform.ready(function() {
-	    $scope.roomsList = $storageService.getObject('roomsList');
-	    if (!$scope.roomsList.length){
-	       $scope.roomsList = [];
-	    }
-	    
-	  });
-
-
-	var template = "modal" + $stateParams.room + ".html"
+	var template = "modal" + ($stateParams.room).replace(/(ñ)/gi,'n') + ".html";
 	$ionicModal.fromTemplateUrl(template, function($ionicModal) {
         $scope.modal = $ionicModal;
     }, {
@@ -23,17 +13,15 @@ app.controller('HomeCtrl',function($rootScope, $scope, $state, $interval, $ionic
 	$scope.res = [];
 	
 	stop = $interval(function() {
-
+		var obj= {}
 	    for (var key in $rootScope.beacons) {
 		  if ($rootScope.beacons.hasOwnProperty(key)) {
 		  	var objkey = "beacon_" + $rootScope.beacons[key].minor;
-		  	var obj = {
-		  		objkey : $rootScope.beacons[key].rssi
-		  	}
-
-		    $scope.res.push(obj);
+		  	obj[objkey] = $rootScope.beacons[key].rssi;
 		  }
 		}
+		
+		$scope.res.push(obj);
 
 	}, 1000);
 
@@ -41,11 +29,9 @@ app.controller('HomeCtrl',function($rootScope, $scope, $state, $interval, $ionic
 	$scope.salir = function(){
 		$scope.modal.hide();
 		$interval.cancel(stop);
-		window.localStorage.setItem($stateParams.room, $scope.res);
-
-		var toShow = window.localStorage.getItem($stateParams.room);
-
-		alert(JSON.stringify(toShow));
+		var nombre = $stateParams.room.toLowerCase().replace(/(ñ)/gi,'n');
+		window.localStorage.setItem(nombre, JSON.stringify($scope.res));
+		infoBeacons[nombre] = JSON.parse(window.localStorage.getItem(nombre));
 	}
 
 });

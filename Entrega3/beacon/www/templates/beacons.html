@@ -1,5 +1,7 @@
+<ion-content>
 <div class="list">
-    <div class="item" ng-repeat="(key, value) in $root.beacons">
+    <div class="item" style="color:black" ng-repeat="(key, value) in beacons">
+        {{$index}}
         <div class="row">
             <div class="col truncate">
                 {{value.uuid}}
@@ -20,3 +22,9 @@
         </div>
     </div>
 </div>
+
+<button ng-click="clear()">
+    Limpiar Informacion
+</button>
+{{infob}}
+</ion-content>
