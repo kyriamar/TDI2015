@@ -11,6 +11,19 @@ body{
 	background-color: #23282C !important;
 }
 
+.detecting {
+    width: 50%;
+    margin: 20px 25%;
+}
+
+.green {
+	color: green;
+}
+
+.right {
+	float: right;
+}
+
 .keypad {
 	background-color: rgb(35,40,44);
 	height: 100%;

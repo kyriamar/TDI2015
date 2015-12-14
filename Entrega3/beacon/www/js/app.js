@@ -23,6 +23,11 @@ app.config(function($stateProvider, $urlRouterProvider) {
     url: '/detect',
     templateUrl: 'templates/configDetect.html',
   })
+  .state('devices', {
+    url: '/devices',
+    templateUrl: 'templates/devices.html',
+    controller: 'DevicesCtrl'
+  })
   .state('inicio', {
     url: '/inicio',
     templateUrl: 'templates/inicio.html',

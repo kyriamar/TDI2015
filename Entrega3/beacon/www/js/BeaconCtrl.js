@@ -5,6 +5,32 @@ var infoBeacons= {
 }
 
 app.controller('BeaconCtrl',function($rootScope, $scope, $state, $interval){ 
+	// constants
+	var mqttBrokerURI      = "wss://m11.cloudmqtt.com:37451/";
+	var mqttClientName     = "browser-" + (new Date().getTime());
+	var mqttUsername       = "irxannry";
+	var mqttPassword       = "LpAOhyNwQktz";
+	var mqttTopic          = "/tdi/home/messages";
+	var handshake          = false;
+
+	$rootScope.messageClient = new Paho.MQTT.Client(mqttBrokerURI, mqttClientName);
+
+	// connect the client
+	$rootScope.messageClient.connect({
+		userName: mqttUsername,
+		password: mqttPassword,
+		onSuccess: onConnect
+	});
+
+	// called when the client connects
+	function onConnect() {
+		console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@connect");
+	}
+
+	$scope.gotoInicio = function() {
+		$state.go('inicio');
+
+	}
 
 	var nb = new NaiveBayes();
 	var obj, key, prediction;

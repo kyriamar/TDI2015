@@ -22,14 +22,15 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-    
+
         ofxMidiOut midiOut;
         unsigned int currentPgm;
         int channel,note, velocity;
         int pan, bend, touch, polytouch, numberOfBlobs, panx, pany;
-    
+
         ofVideoGrabber 		vidGrabber;
         ofxCvColorImage			colorImg;
+        ofTrueTypeFont myfont;
 
         ofxCvGrayscaleImage 	grayImage;
 		ofxCvGrayscaleImage 	grayBg;
@@ -37,15 +38,18 @@ class ofApp : public ofBaseApp{
 
         ofxCvContourFinder 	contourFinder;
         ofRectangle trackingArea;
-    
+
         // ---> tracking blob id
         ofxBlobTracker _blobTracker;
-    
+
         std::map<std::string, std::pair<std::string,int> > blob_mapping;
 
 		int 				threshold;
 		bool				bLearnBakground;
-
+    
+        std::map<int, std::pair<int, std::string> > midiNote;
+    
+    
 
 };
 

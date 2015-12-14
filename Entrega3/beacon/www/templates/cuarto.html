@@ -12,10 +12,11 @@
     
     <div class="selector">
         <ul>
-            <li> <i class="ion-ios-lightbulb"></i>luz de techo</li>
-            <li> <i class="ion-ios-lightbulb"></i>luz de techo</li>
-            <li> <i class="ion-ios-lightbulb"></i>luz de techo</li>
-            <li> <i class="ion-ios-lightbulb"></i>luz de techo</li>
+            <li ng-click="toggleOffOn()"> 
+                <i class="ion-ios-lightbulb"></i>
+                {{devices[0]}}
+                <i class="ion-power right" ng-class="{'green':toggle}"></i>
+            </li>
         </ul>
     </div>
     <div class="footer">

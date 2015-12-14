@@ -1,4 +1,5 @@
 app.controller('HomeCtrl',function($rootScope, $scope, $state, $interval, $ionicModal, $stateParams){
+	$scope.toggle = false;
 
 	var template = "modal" + ($stateParams.room).replace(/(ñ)/gi,'n') + ".html";
 	$ionicModal.fromTemplateUrl(template, function($ionicModal) {
@@ -25,6 +26,14 @@ app.controller('HomeCtrl',function($rootScope, $scope, $state, $interval, $ionic
 
 	}, 1000);
 
+	$scope.toggleOffOn = function() {
+		if ($scope.toggle) {
+			$rootScope.messageClient.send("tdi/home/messages", "1");
+		}else {
+			$rootScope.messageClient.send("tdi/home/messages", "0");
+		}
+		$scope.toggle = !$scope.toggle;
+	}
 
 	$scope.salir = function(){
 		$scope.modal.hide();
